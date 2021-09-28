@@ -6,8 +6,9 @@ public class CurtainController : MonoBehaviour
 {
     private const float DEFAULT_CURTAIN_DURATION = 1.5f;
 
-    public static event UnityAction OnCurtainAnimationEnd = null;
+    public event UnityAction OnCurtainAnimationEnd = null;
 
+    [SerializeField] private bool m_EnableDemoMode = false;
     [SerializeField] private float m_CurtainDuration = 1.0f;
 
     private float m_CurtainTimer = 0.0f;
@@ -23,27 +24,30 @@ public class CurtainController : MonoBehaviour
 
     public void Update()
     {
-        if(Input.GetKeyDown(KeyCode.Q))
+        if(m_EnableDemoMode)
         {
-            ShowCurtain();
-        }
-
-        if(Input.GetKeyDown(KeyCode.W))
-        {
-            HideCurtain();
-        }
-
-        if(Input.GetMouseButtonDown(0) && !IsAnimating())
-        {
-            m_CurtainToggle = !m_CurtainToggle;
-
-            if(m_CurtainToggle)
+            if (Input.GetKeyDown(KeyCode.Q))
             {
-                OpenCurtain();
+                ShowCurtain();
             }
-            else
+
+            if (Input.GetKeyDown(KeyCode.W))
             {
-                CloseCurtain();
+                HideCurtain();
+            }
+
+            if (Input.GetMouseButtonDown(0) && !IsAnimating())
+            {
+                m_CurtainToggle = !m_CurtainToggle;
+
+                if (m_CurtainToggle)
+                {
+                    OpenCurtain();
+                }
+                else
+                {
+                    CloseCurtain();
+                }
             }
         }
 
@@ -113,7 +117,7 @@ public class CurtainController : MonoBehaviour
 
     public bool IsAnimating()
     {
-        return m_CurtainTimer > 0;
+        return m_CurtainTimer > 0.0f;
     }
 
     private void SetCurtainsActive(bool active)
