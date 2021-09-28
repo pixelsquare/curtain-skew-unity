@@ -16,7 +16,11 @@ public class CurtainAnimator : MonoBehaviour
     [Range(-1.0f, 1.0f)]
     [SerializeField] private int m_Direction = 0;
 
+    [SerializeField] private string m_SortingLayer = "Default";
+    [SerializeField] private int m_SortingOrder = 0;
+
     private Mesh m_Mesh = null;
+    private MeshRenderer m_MeshRenderer = null;
 
     private Vector2[] m_MeshUvs = null;
     private Vector2[] m_MeshOriginalUvs = null;
@@ -28,6 +32,8 @@ public class CurtainAnimator : MonoBehaviour
 
     public void Awake()
     {
+        m_MeshRenderer = GetComponent<MeshRenderer>();
+
         MeshFilter meshFilter = GetComponent<MeshFilter>();
         m_Mesh = meshFilter.GetMesh();
         m_MeshUvs = m_Mesh.uv;
@@ -37,6 +43,7 @@ public class CurtainAnimator : MonoBehaviour
     public void Start()
     {
         m_CurtainTimer = m_CurtainDuration;
+        SetSortingLayer(m_SortingLayer, m_SortingOrder);
     }
 
     public void Update()
@@ -122,6 +129,15 @@ public class CurtainAnimator : MonoBehaviour
         }
 
         m_Mesh.uv = m_MeshUvs;
+    }
+
+    public void SetSortingLayer(string sortingName, int sortingOrder)
+    {
+        if(m_MeshRenderer != null)
+        {
+            m_MeshRenderer.sortingLayerID = SortingLayer.NameToID(sortingName);
+            m_MeshRenderer.sortingOrder = sortingOrder;
+        }
     }
 
     private int GetCurtainStateDirection(CurtainState curtainState)

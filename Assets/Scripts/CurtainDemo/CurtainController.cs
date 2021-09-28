@@ -11,6 +11,9 @@ public class CurtainController : MonoBehaviour
     [SerializeField] private bool m_EnableDemoMode = false;
     [SerializeField] private float m_CurtainDuration = 1.0f;
 
+    [SerializeField] private string m_SortingLayer = "Default";
+    [SerializeField] private int m_SortingOrder = 0;
+
     private float m_CurtainTimer = 0.0f;
     private CurtainAnimator[] m_CurtainAnimators = null;
 
@@ -20,6 +23,11 @@ public class CurtainController : MonoBehaviour
     {
         m_CurtainAnimators = GetComponentsInChildren<CurtainAnimator>(true);
         m_CurtainDuration = (m_CurtainDuration <= 0.0f) ? DEFAULT_CURTAIN_DURATION : m_CurtainDuration;
+    }
+
+    public void Start()
+    {
+        SetCurtainSortingLayer(m_SortingLayer, m_SortingOrder);
     }
 
     public void Update()
@@ -118,6 +126,14 @@ public class CurtainController : MonoBehaviour
     public bool IsAnimating()
     {
         return m_CurtainTimer > 0.0f;
+    }
+
+    public void SetCurtainSortingLayer(string sortingLayer, int sortingOrder)
+    {
+        for(int i = 0; i < m_CurtainAnimators.Length; i++)
+        {
+            m_CurtainAnimators[i].SetSortingLayer(sortingLayer, sortingOrder);
+        }
     }
 
     private void SetCurtainsActive(bool active)
